@@ -61,6 +61,9 @@ def patient_normalise(data):
     :param data: Array-like object
     :returns: Minimum value of data
     """
+    if not isinstance(data, np.ndarray) or len(data.shape) != 2:
+        raise ValueError("Inflammation data should be a 2D numpy array")
+
     if np.any(data < 0):
         raise ValueError('Inflammation values should not be negative')
 
