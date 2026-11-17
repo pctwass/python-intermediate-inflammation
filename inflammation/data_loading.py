@@ -16,14 +16,16 @@ class DataLoader():
         if self.file_extension == None:
             raise Exception(f"A file type should be defined to load in data.")
 
-        data_file_paths = glob.glob(os.path.join(self.data_dir_path, f'{self.file_prefix}*.csv'))
+        data_file_paths = glob.glob(os.path.join(self.data_dir_path, f'{self.file_prefix}*.{self.file_extension}'))
         if len(data_file_paths) == 0:
             raise ValueError(f"No inflammation data files found in path {self.data_dir_path} with prefix {self.file_prefix} and extension .{self.file_extension}.")
+
+        return data_file_paths
 
 
 class CSVDataLoader(DataLoader):
     def __init__(self, data_dir_path: str, file_prefix: str = None):
-        super.__init__(data_dir_path, file_prefix)
+        super().__init__(data_dir_path, file_prefix)
         self.file_extension = 'csv'
 
     def load_inflammation_data(self) -> list[np.ndarray[float]]:
@@ -34,7 +36,7 @@ class CSVDataLoader(DataLoader):
 
 class JSONDataLoader(DataLoader):
     def __init__(self, data_dir_path: str, file_prefix: str = None):
-        super.__init__(data_dir_path, file_prefix)
+        super().__init__(data_dir_path, file_prefix)
         self.file_extension = 'json'
 
     def load_inflammation_data(self) -> list[np.ndarray[float]]:

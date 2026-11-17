@@ -17,8 +17,9 @@ def analyse_data(data_loader: CSVDataLoader):
     
     :param data_dir: Path to data directory
     """
-    data = data_loader.load_inflammation_csv()
+    data = data_loader.load_inflammation_data()
     daily_std = compute_daily_std(data)
+    return daily_std
     visualize_daily_std(daily_std)
 
 
