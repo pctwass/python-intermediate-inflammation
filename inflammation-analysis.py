@@ -9,16 +9,17 @@ from inflammation.compute_data import analyse_data
 
 
 def main(args):
-    """The MVC Controller of the patient inflammation data system.
+    """
+    The MVC Controller of the patient inflammation data system.
 
     The Controller is responsible for:
     - selecting the necessary models and views for the current task
     - passing data between models and views
     """
+
     infiles = args.infiles
     if not isinstance(infiles, list):
         infiles = [args.infiles]
-
 
     if args.full_data_analysis:
         analyse_data(os.path.dirname(infiles[0]))
@@ -51,5 +52,4 @@ if __name__ == "__main__":
         dest='full_data_analysis')
 
     args = parser.parse_args()
-
     main(args)
