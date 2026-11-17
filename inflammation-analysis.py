@@ -6,6 +6,7 @@ import os
 
 from inflammation import models, views
 from inflammation.compute_data import analyse_data
+from inflammation.data_loading import CSVDataLoader
 
 
 def main(args):
@@ -22,7 +23,9 @@ def main(args):
         infiles = [args.infiles]
 
     if args.full_data_analysis:
-        analyse_data(os.path.dirname(infiles[0]))
+        data_dir_path = os.path.dirname(infiles[0])
+        data_loader = CSVDataLoader(data_dir_path, file_prefix='inflammation')
+        analyse_data(data_loader)
         return
 
     for filename in infiles:
