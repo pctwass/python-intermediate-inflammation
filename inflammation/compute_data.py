@@ -1,9 +1,8 @@
 """Module containing mechanism for calculating standard deviation between datasets.
 """
 
-import numpy as np
-
-from inflammation import models, views
+from inflammation.models import compute_daily_std
+from inflammation.views import visualize_daily_std
 from inflammation.data_loading import CSVDataLoader
 
 
@@ -17,19 +16,7 @@ def analyse_data(data_loader: CSVDataLoader):
     
     :param data_dir: Path to data directory
     """
-    data = data_loader.load_inflammation_csv()
+    data = data_loader.load_inflammation_data()
     daily_std = compute_daily_std(data)
+    return daily_std
     visualize_daily_std(daily_std)
-
-
-def compute_daily_std(data: np.ndarray[float]) -> np.ndarray[float]:
-    means_by_day = map(models.daily_mean, data)
-    means_by_day_matrix = np.stack(list(means_by_day))
-    return np.std(means_by_day_matrix, axis=0)
-
-
-def visualize_daily_std(daily_std: np.ndarray[float]):
-    graph_data = {
-        'standard deviation by day': daily_std,
-    }
-    views.visualize(graph_data)

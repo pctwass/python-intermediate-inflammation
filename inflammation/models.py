@@ -93,3 +93,9 @@ def patient_normalise(data):
     normalised[np.isnan(normalised)] = 0
     normalised[normalised < 0] = 0
     return normalised
+
+
+def compute_daily_std(data: np.ndarray[float]) -> np.ndarray[float]:
+    means_by_day = map(daily_mean, data)
+    means_by_day_matrix = np.stack(list(means_by_day))
+    return np.std(means_by_day_matrix, axis=0)

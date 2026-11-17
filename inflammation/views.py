@@ -22,3 +22,10 @@ def visualize(data_dict):
     fig.tight_layout()
 
     plt.show()
+
+
+def visualize_daily_std(daily_std: np.ndarray[float]):
+    graph_data = {
+        'standard deviation by day': daily_std,
+    }
+    visualize(graph_data)
