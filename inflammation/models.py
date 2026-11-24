@@ -15,8 +15,15 @@ def load_csv(filename):
     """
     Load a Numpy array from a CSV
 
-    :param filename: Filename of CSV to load
-    :returns: Content of the input CSV as a Numpy NDarray
+    Parameters
+    ----------
+    filename : str
+        path to the csv file
+
+    Returns
+    -------
+    np.ndarray
+        2D array of inflammation data
     """
     return np.loadtxt(fname=filename, delimiter=',')
 

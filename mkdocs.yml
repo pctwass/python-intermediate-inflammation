@@ -2,7 +2,12 @@ site_name: Inflam
 
 nav:
   - Overview: index.md
+  - API: API.md
 
 plugins:
   - search
-  - mkdocstrings
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
