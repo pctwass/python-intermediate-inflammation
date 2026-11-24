@@ -8,17 +8,44 @@ and each column represents a single day across all patients.
 """
 
 import numpy as np
+import json
 
 
-def load_csv(filename):  
+def load_csv(filename):
     """
     Load a Numpy array from a CSV
 
-    :param filename: Filename of CSV to load
-    :returns: Content of the input CSV as a Numpy NDarray
+    Parameters
+    ----------
+    filename : str
+        path to the csv file
+
+    Returns
+    -------
+    np.ndarray
+        2D array of inflammation data
     """
     return np.loadtxt(fname=filename, delimiter=',')
 
+
+def load_json(filename):
+    """Load a numpy array from a JSON document.
+    
+    Expected format:
+    [
+      {
+        "observations": [0, 1]
+      },
+      {
+        "observations": [0, 2]
+      }    
+    ]
+    :param filename: Filename of CSV to load
+    """
+    with open(filename, 'r', encoding='utf-8') as file:
+        data_as_json = json.load(file)
+        return [np.array(entry['observations']) for entry in data_as_json]
+    
 
 def daily_mean(data):
     """
@@ -50,12 +77,32 @@ def daily_min(data):
     return np.min(data, axis=0)
 
 
-def compute_standard_deviation(data):
-    """Computes and returns standard deviation for data."""
-    mean_across_days = np.mean(data, axis=0)
-    devs = []
-    for entry in data:
-        devs.append((entry - mean_across_days) * (entry - mean_across_days))
+def patient_normalise(data):
+    """
+    Normalise patient data from a 2D inflammation data array.
 
-    standard_deviation = sum(devs) / len(data)
-    return {'standard deviation': standard_deviation}
+    NaN values are ignored, and normalised to 0.
+
+    Negative values are rounded to 0.
+    
+    :param data: Array-like object
+    :returns: Minimum value of data
+    """
+    if not isinstance(data, np.ndarray) or len(data.shape) != 2:
+        raise ValueError("Inflammation data should be a 2D numpy array")
+
+    if np.any(data < 0):
+        raise ValueError('Inflammation values should not be negative')
+
+    max_inflammation_patiant = np.nanmax(data, axis=1)
+    with np.errstate(invalid='ignore', divide='ignore'):
+        normalised = data / max_inflammation_patiant[:, np.newaxis]
+    normalised[np.isnan(normalised)] = 0
+    normalised[normalised < 0] = 0
+    return normalised
+
+
+def compute_daily_std(data: np.ndarray[float]) -> np.ndarray[float]:
+    means_by_day = map(daily_mean, data)
+    means_by_day_matrix = np.stack(list(means_by_day))
+    return np.std(means_by_day_matrix, axis=0)
