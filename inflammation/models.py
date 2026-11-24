@@ -57,5 +57,5 @@ def compute_standard_deviation(data):
     for entry in data:
         devs.append((entry - mean_across_days) * (entry - mean_across_days))
 
-    s_dev2 = sum(devs) / len(data)
-    return {'standard deviation': s_dev2}
+    standard_deviation = sum(devs) / len(data)
+    return {'standard deviation': standard_deviation}
